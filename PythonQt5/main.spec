@@ -41,5 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['F:\\PythonTools\\PythonQt5\\images\\icon\\1.ico'],
+    icon=['images/icon/1.ico'],
 )
