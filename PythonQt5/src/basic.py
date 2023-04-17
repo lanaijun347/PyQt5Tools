@@ -1,7 +1,12 @@
 import os
 import shutil
 from typing import Union
+
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QPushButton, QFileDialog, QLineEdit, QTextEdit, QMessageBox
 from lxml import etree
+
+from src.config import CURRENT_PATH, IMAGE_PATH
 
 
 def delete_and_create_folder(path: Union[bytes, str]):
@@ -66,13 +71,55 @@ def get_menu_xml_path_attribute_last_layer(path) -> list:
     attribute_list = get_menu_xml_path_attribute(path)
     for path in attribute_list:
         if '/' in path:
-            tmp = path.split('/')[-1]
+            tmp_str = path.split('/')[-1]
         elif '\\' in path:
-            tmp = path.split('\\')[-1]
+            tmp_str = path.split('\\')[-1]
         else:
-            tmp = path
-        out_list.append(tmp)
+            tmp_str = path
+        out_list.append(tmp_str)
     return out_list
+
+
+def open_folder_path(edit: Union[QLineEdit, QTextEdit]):
+    """
+    打开获取文件夹窗口，把选择的文件夹路径写入 QLineEdit
+    :param edit: QLineEdit
+    :return:
+    """
+    directory = QFileDialog.getExistingDirectory(None, "选取文件夹", CURRENT_PATH)
+    edit.setText(directory)
+
+
+def open_file_path(edit: Union[QLineEdit, QTextEdit]):
+    """
+    打开获取文件窗口，把选择的文件路径写入 QLineEdit
+    :param edit:
+    :return:
+    """
+    directory = QFileDialog.getOpenFileName(None, "选取文件", CURRENT_PATH, "All Files (*);;Text Files (*.txt)")
+    edit.setText(directory[0])
+
+
+def clear_edit(edit: Union[QLineEdit, QTextEdit]):
+    """
+    清空输入框
+    :param edit:
+    :return:
+    """
+    edit.setText('')
+
+
+def message_box(title: str, msg: str, ico_path=''):
+    """
+    信息弹框
+    :param title: 标题
+    :param msg: 显示信息
+    :param ico_path: 图标路径
+    :return:
+    """
+    msg_box = QMessageBox(QMessageBox.Information, title, msg)
+    msg_box.setWindowIcon(QIcon(ico_path))
+    msg_box.exec_()
 
 
 if __name__ == '__main__':
