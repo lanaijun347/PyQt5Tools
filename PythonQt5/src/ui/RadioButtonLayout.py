@@ -1,3 +1,5 @@
+from typing import Dict
+
 from PyQt5.QtWidgets import QHBoxLayout, QGroupBox, QRadioButton, QLabel
 
 
@@ -6,7 +8,7 @@ class RadioButtonLayout:
         self.group_box = QGroupBox()
         self.tip_str = tip_str
         self.args = args
-        self.btn_dict = {}
+        self.btn_dict: Dict[int, QRadioButton] = {}  # key: 0 开始的整数， value: radio_button 名称
 
     def radio_button_style_1(self):
         label = QLabel(self.tip_str)
