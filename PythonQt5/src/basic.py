@@ -122,6 +122,23 @@ def message_box(title: str, msg: str, ico_path=''):
     msg_box.exec_()
 
 
+def cmd_insert_space(n: str):
+    """
+    给命令插入空格
+    :param n: 命令字符串
+    :return: 插入空格后结果
+    """
+    out = ''
+    count = 1
+    for i in n:
+        if count % 2 == 0:
+            out = out + i + ' '
+        else:
+            out += i
+        count += 1
+    return out
+
+
 if __name__ == '__main__':
     # p = r'F:\PythonTools\JBT项目\EV_FLYER\V19.20解析\menu\menu_新能源.xml'
     # tmp = get_menu_xml_path_attribute_last_layer(p)

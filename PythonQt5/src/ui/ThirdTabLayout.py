@@ -14,11 +14,12 @@ from src.ui.RadioButtonLayout import RadioButtonLayout
 from src.ui.ThirdTabThread import ThirdTabThread
 
 
-class ThirdTabUi:
+class ThirdTabLayout:
     def __init__(self):
         self.layout = QVBoxLayout()
         self._set_tip_layout()
         self._input_path_layout()
+        self._select_type_layout()
         self._set_progress_bar_layout()
         self._set_output_info_layout()
         self.edit_info_list: List[str] = []
@@ -69,11 +70,16 @@ class ThirdTabUi:
     def _start(self):
         try:
             self.edit.setText('')
+            self.edit_info_list.clear()
             self.run_btn.setEnabled(False)
             if not os.path.exists(self.path_edit.text()):
                 message_box("错误", "路径输入错误！", os.path.join(IMAGE_PATH, 'icon/1.ico'))
                 return None
-            self.thread = ThirdTabThread(self.path_edit.text(), self.edit_info_list)
+            if self.radio_data[0].isChecked():
+                file_type = 0
+            else:
+                file_type = 1
+            self.thread = ThirdTabThread(self.path_edit.text(), self.edit_info_list, file_type)
             self.thread.run_signal.connect(self._write_edit_msg)
             self.thread.msg_signal.connect(message_box)
             self.thread.start()
@@ -82,3 +88,9 @@ class ThirdTabUi:
             return None
         finally:
             self.run_btn.setEnabled(True)
+
+    def _select_type_layout(self):
+        self.radio_layout = RadioButtonLayout('\t获取文件类型：', "标准协议类型", "VCICfg.xml")
+        select_layout = self.radio_layout.radio_button_style_1()
+        self.radio_data = self.radio_layout.btn_dict
+        self.layout.addWidget(select_layout)

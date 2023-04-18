@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from src.ui.FirstTabUi import *
 from src.ui.OtherTabLayout import OtherTabLayout
 from src.ui.SecondTabLayout import SecondTabLayout
-from src.ui.ThirdTabUi import ThirdTabUi
+from src.ui.ThirdTabLayout import ThirdTabLayout
 
 
 class MainUi(QWidget):
@@ -72,7 +72,7 @@ class MainUi(QWidget):
         self.tab2.setLayout(layout)
 
     def init_tab3_ui(self):
-        self.tab3_ui = ThirdTabUi()
+        self.tab3_ui = ThirdTabLayout()
         layout = self.tab3_ui.get_layout()
         self.tab3.setLayout(layout)
 
