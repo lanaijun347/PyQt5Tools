@@ -6,9 +6,9 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=[],
+    pathex=['F:\\GitHubProject\\PythonProject\\PyQt5Tools\\PythonQt5', 'F:\\GitHubProject\\PythonProject\\PyQt5Tools\\PythonQt5\\chatvenv\\Lib\\site-packages'],
     binaries=[],
-    datas=[('images/icon/1.ico', 'images/icon'), ('images/WeChatFriendQRCode.png', 'images')],
+    datas=[('./images/icon/1.ico', './images/icon'), ('./images/WeChatFriendQRCode.png', './images')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -41,5 +41,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['images/icon/1.ico'],
+    icon=['./images/icon/1.ico'],
 )

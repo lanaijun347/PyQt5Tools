@@ -6,6 +6,7 @@ from typing import Dict
 
 import chardet
 from PyQt5.QtCore import QThread, pyqtSignal
+from lxml import etree
 
 from src.basic import cmd_insert_space
 from src.config import CURRENT_PATH, IMAGE_PATH
@@ -59,6 +60,8 @@ class ThirdTabThread(QThread):
                         protocol_frame, protocol_filter = self.get_xml_id(cur_path)
                     else:
                         protocol_frame, protocol_filter = self.get_protocol_id(cur_path)
+                    if not protocol_frame:
+                        continue
                     if protocol_frame not in out_dict.keys():
                         out_dict[protocol_frame] = protocol_filter
                 except Exception:
@@ -78,6 +81,7 @@ class ThirdTabThread(QThread):
             self.init_out_dir()
             with open(self.out_file, 'w', encoding='utf-8') as f:
                 f.write(out_str)
+            self.edit_msg.append(f'\n输出路径: {self.out_file}')
             self.edit_msg.append("程序运行结束！")
             self.run_signal.emit(100)
             self.msg_signal.emit('信息', '程序运行结束！', self.icon_path)
@@ -86,7 +90,7 @@ class ThirdTabThread(QThread):
             return None
 
     def get_protocol_id(self, path) -> tuple:
-        result = ()
+        result = ("", "")
         with open(path, 'rb') as f:
             file_encoding = chardet.detect(f.read())["encoding"]
         with open(path, 'r', encoding=file_encoding) as f:
@@ -111,9 +115,27 @@ class ThirdTabThread(QThread):
                 return result
 
     def get_xml_id(self, path) -> tuple:
-        protocol_frame = ''
-        protocol_filter = ''
-        return protocol_frame, protocol_filter
+        try:
+            xml = etree.parse(path)
+            receive_pin = xml.xpath("//receive_pin/text()")[0]
+            send_pin = xml.xpath("//send_pin/text()")[0]
+            if receive_pin == send_pin:
+                self.edit_msg.append(f'非CAN线路径: {path}')
+                return '', ''
+            filter_str = xml.xpath("//CAN_filter_id/text()")[0]
+            cmd_list = xml.xpath("//command/text()")[0]
+        except Exception:
+            self.edit_msg.append(f'xml解析错误: {path}')
+            return '', ''
+        filter_value = int(filter_str.split(",")[-1].strip().upper().replace('0X', ''), 16)
+        frame_list = cmd_list.split(',')
+        if filter_value > 0xffff:
+            byte_num = 4
+        else:
+            byte_num = 2
+        filter_id = hex(filter_value).replace('0x', '').upper().rjust(8, '0')
+        frame_id = (''.join(frame_list[0:byte_num])).upper().replace('0X', '').rjust(8, '0')
+        return frame_id, filter_id
 
     def init_out_dir(self):
         if os.path.exists(self.out_dir):
@@ -122,6 +144,4 @@ class ThirdTabThread(QThread):
 
 
 if __name__ == '__main__':
-    input = r'F:/PythonTools/JBT项目/EV_FLYER/V19.20解析/log_L117加密'
-    input.upper()
-    print(input)
+    pass

@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="F:\PythonTools\PythonQt5\chatvenv"
+VIRTUAL_ENV="F:\GitHubProject\PythonProject\PyQt5Tools\PythonQt5\chatvenv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"
