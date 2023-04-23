@@ -139,6 +139,18 @@ def cmd_insert_space(n: str):
     return out
 
 
+def is_contains_chinese(str_1) -> bool:
+    """
+    判断字符串中是否含有中文
+    :param str_1:
+    :return:
+    """
+    for _char in str_1:
+        if '\u4e00' <= _char <= '\u9fa5':
+            return True
+    return False
+
+
 if __name__ == '__main__':
     # p = r'F:\PythonTools\JBT项目\EV_FLYER\V19.20解析\menu\menu_新能源.xml'
     # tmp = get_menu_xml_path_attribute_last_layer(p)

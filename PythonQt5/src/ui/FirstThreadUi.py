@@ -31,7 +31,7 @@ class FirstThreadUi(QThread):
         self.act_value = data['act_value']
         self.spe_value = data['spe_value']
         self.out_dir = os.path.join(CURRENT_PATH, 'out')  # 文件路径输出
-        self.out_file_dir = os.path.join(self.out_dir, 'out')
+        self.out_file_dir = os.path.join(self.out_dir, '协议命令')
         self.error_path = os.path.join(CURRENT_PATH, 'out\\error.txt')  # 错误信息文件
 
     def run(self):

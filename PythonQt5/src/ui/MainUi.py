@@ -2,6 +2,7 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import *
 
 from src.ui.FirstTabUi import *
+from src.ui.FourthTabLayout import FourthTabLayout
 from src.ui.OtherTabLayout import OtherTabLayout
 from src.ui.SecondTabLayout import SecondTabLayout
 from src.ui.ThirdTabLayout import ThirdTabLayout
@@ -41,6 +42,7 @@ class MainUi(QWidget):
         self.tab1 = QWidget(parent=None)
         self.tab2 = QWidget(parent=None)
         self.tab3 = QWidget(parent=None)
+        self.tab4 = QWidget(parent=None)
         self.other_tab = QWidget(parent=None)
         # 创建选项卡
         self.tab_widget = QTabWidget(self)
@@ -52,6 +54,7 @@ class MainUi(QWidget):
         self.tab_widget.addTab(self.tab1, '协议命令获取')
         self.tab_widget.addTab(self.tab2, '文件/文件夹拷贝工具')
         self.tab_widget.addTab(self.tab3, '获取帧ID和滤波ID')
+        self.tab_widget.addTab(self.tab4, '检查xml公式是否存在中文')
         self.tab_widget.addTab(self.other_tab, '扩展服务')
         # 选项卡再主界面布局
         self.gridLayout.addWidget(self.tab_widget, 0, 0, 1, 1)
@@ -59,6 +62,7 @@ class MainUi(QWidget):
         self.init_tab1_ui()
         self.init_tab2_ui()
         self.init_tab3_ui()
+        self.init_tab4_ui()
         self.init_other_tab_ui()
 
     def init_tab1_ui(self):
@@ -75,6 +79,11 @@ class MainUi(QWidget):
         self.tab3_ui = ThirdTabLayout()
         layout = self.tab3_ui.get_layout()
         self.tab3.setLayout(layout)
+
+    def init_tab4_ui(self):
+        self.tab4_ui = FourthTabLayout()
+        layout = self.tab4_ui.get_layout()
+        self.tab4.setLayout(layout)
 
     def init_other_tab_ui(self):
         self.other_tab_ui = OtherTabLayout()

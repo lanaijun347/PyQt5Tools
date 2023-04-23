@@ -82,7 +82,10 @@ class ThirdTabThread(QThread):
             with open(self.out_file, 'w', encoding='utf-8') as f:
                 f.write(out_str)
             self.edit_msg.append(f'\n输出路径: {self.out_file}')
-            self.edit_msg.append("程序运行结束！")
+            if len(self.edit_msg) > 1:
+                self.edit_msg.append("程序运行结束！")
+            else:
+                self.edit_msg.append("程序运行结束,无错误信息！")
             self.run_signal.emit(100)
             self.msg_signal.emit('信息', '程序运行结束！', self.icon_path)
         except Exception:
@@ -99,11 +102,12 @@ class ThirdTabThread(QThread):
                 if protocol_type[0].strip() == protocol_type[1].strip():
                     self.edit_msg.append(f"非CAN线路径： {path}")
                     return result
-                protocol_filter = protocol_type[2].split('$~')[-1].split(",")[0].split("~")[0].strip()
+                protocol_filter = protocol_type[2].split('$~')[-1].split(",")[0].split("~")[0].strip().upper().replace(
+                    '0X', '')
                 f.seek(0)
                 for line in f.readlines():
                     if "REQ" in line:
-                        protocol_frame = line.split(':')[-1].split(' ')[0].strip()
+                        protocol_frame = line.split(':')[-1].split(' ')[0].strip().upper().replace('0X', '')
                         break
                 if len(protocol_frame) < 1:
                     self.edit_msg.append(f'通讯线获取解析错误: {path}')

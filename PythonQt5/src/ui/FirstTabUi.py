@@ -21,7 +21,7 @@ class FirstTabUi:
         self._set_path_ui()
         self._set_data_ui()
         self._set_progress_bar_ui()
-        self._set_debug_ui()
+        # self._set_debug_ui()
 
     def _init_tip(self):
         label = QLabel("使用说明:该工具只支持CAN和Kwp2000协议命令导出，且协议必须为标准导出格式（$~引脚$~引脚$~波特率）.")
@@ -130,11 +130,11 @@ class FirstTabUi:
     def _write_debug(self, num):
         # 设置进度条值
         self.progress_bar_ui.setValue(num)
-        self.debug_msg.setText('\n'.join(self.debug_msg_list))
-        # 当文本内容长度超过文本框的高度时，会出现滑条，滑条始终在最底端
-        self.debug_msg.verticalScrollBar().setValue(self.debug_msg.verticalScrollBar().maximum())
-        # self.debug_msg.setText('1')
-        self.debug_msg.repaint()  # 更新内容,如果不更新可能没有显示新内容
+        # self.debug_msg.setText('\n'.join(self.debug_msg_list))
+        # # 当文本内容长度超过文本框的高度时，会出现滑条，滑条始终在最底端
+        # self.debug_msg.verticalScrollBar().setValue(self.debug_msg.verticalScrollBar().maximum())
+        # # self.debug_msg.setText('1')
+        # self.debug_msg.repaint()  # 更新内容,如果不更新可能没有显示新内容
 
     def _end(self, msg):
         msg_box = QMessageBox(QMessageBox.Information, "Tip", msg)
