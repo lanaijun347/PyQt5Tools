@@ -35,7 +35,7 @@ class ThirdTabThread(QThread):
                     if ".ASM" in self.path.upper() or ".TXT" in self.path.upper():
                         all_paths.append(self.path)
                 else:
-                    if 'VCICFG.XML' == self.path.upper():
+                    if 'VCICFG.XML' in self.path.upper():
                         all_paths.append(self.path)
             if os.path.isdir(self.path):
                 for file_path, dir_names, file_names in os.walk(self.path):
@@ -79,7 +79,7 @@ class ThirdTabThread(QThread):
                     n).replace('0x', '').rjust(3, '0') + '\n'
                 n += 1
             self.init_out_dir()
-            with open(self.out_file, 'w', encoding='utf-8') as f:
+            with open(self.out_file, 'w', encoding='utf-8', errors='ignore') as f:
                 f.write(out_str)
             self.edit_msg.append(f'\n输出路径: {self.out_file}')
             if len(self.edit_msg) > 1:
@@ -94,11 +94,16 @@ class ThirdTabThread(QThread):
 
     def get_protocol_id(self, path) -> tuple:
         result = ("", "")
-        with open(path, 'rb') as f:
-            file_encoding = chardet.detect(f.read())["encoding"]
-        with open(path, 'r', encoding=file_encoding) as f:
+        # with open(path, 'rb') as f:
+        #     file_encoding = chardet.detect(f.read())["encoding"]
+        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
             try:
-                protocol_type: tuple = re.findall(r'\$~([0-9]{2}|[0-9]{1})\$~([0-9]{2}|[0-9]{1})(.*)', f.read())[0]
+                if '$~#' in f.read():
+                    f.seek(0)
+                    protocol_type: tuple = re.findall(r'\$~#([0-9]{2}|[0-9]{1})\$~#([0-9]{2}|[0-9]{1})(.*)', f.read())[0]
+                else:
+                    f.seek(0)
+                    protocol_type: tuple = re.findall(r'\$~([0-9]{2}|[0-9]{1})\$~([0-9]{2}|[0-9]{1})(.*)', f.read())[0]
                 if protocol_type[0].strip() == protocol_type[1].strip():
                     self.edit_msg.append(f"非CAN线路径： {path}")
                     return result
@@ -107,7 +112,7 @@ class ThirdTabThread(QThread):
                 f.seek(0)
                 for line in f.readlines():
                     if "REQ" in line:
-                        protocol_frame = line.split(':')[-1].split(' ')[0].strip().upper().replace('0X', '')
+                        protocol_frame = line.split(':')[1].split(' ')[0].strip().upper().replace('0X', '')
                         break
                 if len(protocol_frame) < 1:
                     self.edit_msg.append(f'通讯线获取解析错误: {path}')
@@ -131,7 +136,7 @@ class ThirdTabThread(QThread):
         except Exception:
             self.edit_msg.append(f'xml解析错误: {path}')
             return '', ''
-        filter_value = int(filter_str.split(",")[-1].strip().upper().replace('0X', ''), 16)
+        filter_value = int(filter_str.split(",")[0].strip().upper().replace('0X', ''), 16)
         frame_list = cmd_list.split(',')
         if filter_value > 0xffff:
             byte_num = 4

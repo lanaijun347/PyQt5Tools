@@ -24,7 +24,7 @@ class FirstTabUi:
         # self._set_debug_ui()
 
     def _init_tip(self):
-        label = QLabel("使用说明:该工具只支持CAN和Kwp2000协议命令导出，且协议必须为标准导出格式（$~引脚$~引脚$~波特率）.")
+        label = QLabel("使用说明:该工具只支持CAN和Kwp2000协议命令导出，且协议必须为标准导出格式（$~引脚$~引脚$~波特率$~滤波ID）.")
         label.setAlignment(Qt.AlignCenter)
         label.setWordWrap(True)  # 自动换行
         label.setFont(QFont('黑体', 18))

@@ -1,5 +1,6 @@
 import os
 import re
+import shutil
 import time
 from typing import Union
 
@@ -42,10 +43,10 @@ class FirstThreadUi(QThread):
                 if os.path.isfile(self.path):
                     path_list.append(self.path)
                 elif os.path.isdir(self.path):
-                    for file_name in os.listdir(self.path):
-                        tmp_path = os.path.join(self.path, file_name)
-                        if os.path.exists(tmp_path):
-                            path_list.append(tmp_path)
+                    for file_path, dir_names, file_names in os.walk(self.path):
+                        for file_name in file_names:
+                            path = os.path.join(file_path, file_name)
+                            path_list.append(path)
                 else:
                     self.end.emit('非法路径！')
                     return None
@@ -75,16 +76,18 @@ class FirstThreadUi(QThread):
             os.mkdir(self.out_dir)
         if not os.path.exists(self.out_file_dir):
             os.mkdir(self.out_file_dir)
+        else:
+            shutil.rmtree(self.out_file_dir)
+            os.mkdir(self.out_file_dir)
         if os.path.exists(self.error_path):
             os.remove(self.error_path)
-        for file in os.listdir(self.out_file_dir):
-            os.remove(os.path.join(self.out_file_dir, file))
 
     def file_handle(self, path):
-        with open(path, 'rb') as f:
-            file_encoding = chardet.detect(f.read())["encoding"]
+        # with open(path, 'rb') as f:
+        #     file_encoding = chardet.detect(f.read())["encoding"]
         get_protocol_flag = True
         protocolType = -1
+        ans = -1
         fiterId = ''
         clearDtcCmdList = []
         readDtcCmdlist = []
@@ -95,15 +98,27 @@ class FirstThreadUi(QThread):
         inCmdList = []
         idleCmdList = []
         quitCmdList = []
-        with open(path, 'r', encoding=file_encoding) as f:
+        bps_list = ['500000', '250000', '125000', '500K', '250K', '125K', '10400', '9600']
+        with open(path, 'r', encoding='utf-8', errors='ignore') as f:
             try:
                 for line in f.readlines():
                     line = line.replace("：", ":")
                     if "$~" in line and get_protocol_flag:
-                        protocolType = self.get_protocol_type(line)
+                        if ans == -1:
+                            protocolType = self.get_protocol_type(line)
+                        else:
+                            protocolType = 0
                         if protocolType == 0:  # CAN
                             fiterId = (line.split("$~")[-1]).replace('\n', '')
-                            get_protocol_flag = False
+                            if fiterId.upper() in bps_list:
+                                ans = 0
+                            else:
+                                if ans == -1:
+                                    get_protocol_flag = False
+                            if 'ANS' in line and ans == 0:
+                                fiterId = line.split(':')[-1].split(' ')[0]
+                                ans = -1
+                                get_protocol_flag = False
                         elif protocolType == 1:  # Kwp2000
                             fiterId = ''
                             get_protocol_flag = False
@@ -180,8 +195,20 @@ class FirstThreadUi(QThread):
             self.info_msgs.append("无法获取协议类型")
             bs.write_debug(self.error_path, f"无法获取协议类型：{path}")
             return None
-        name = os.path.split(path)[-1]
-        with open(os.path.join(self.out_file_dir, name), 'w', encoding=file_encoding) as f1:
+        # name = os.path.split(path)[-1]
+        if os.path.isdir(self.path):
+            name = path.replace(self.path, '')
+            tmp_list = name.split('\\')
+            tmp_path = self.out_file_dir
+            for each in tmp_list[0: -1]:
+                tmp_path = os.path.join(tmp_path, each)
+                if not os.path.exists(tmp_path):
+                    os.mkdir(tmp_path)
+            out_path = os.path.join(tmp_path, tmp_list[-1])
+        else:
+            name = os.path.split(path)[-1]
+            out_path = os.path.join(self.out_file_dir, name)
+        with open(out_path, 'w', encoding='utf-8', errors='ignore') as f1:
             for line in inCmdList:
                 f1.writelines(line)
         return None

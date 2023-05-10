@@ -69,6 +69,7 @@ class FourthTabLayout:
         try:
             self.edit.setText('')
             self.edit_info_list.clear()
+            self.progress_bar_ui.setValue(0)
             self.run_btn.setEnabled(False)
             if not os.path.exists(self.path_edit.text()):
                 message_box("错误", "无效路径！", os.path.join(IMAGE_PATH, 'icon/1.ico'))
