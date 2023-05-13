@@ -1,4 +1,6 @@
 import os
+
+from PyQt5.QtWidgets import QPushButton
 from lxml import etree
 
 from PyQt5.QtCore import QThread, pyqtSignal
@@ -11,10 +13,11 @@ class FourthTabThread(QThread):
     run_signal = pyqtSignal(int)
     msg_signal = pyqtSignal(str, str, str)
 
-    def __init__(self, path: str, edit_msg: list):
+    def __init__(self, path: str, edit_msg: list, run_btn: QPushButton):
         super(FourthTabThread, self).__init__()
         self.path = path
         self.edit_msg = edit_msg
+        self.run_btn = run_btn
         self.icon_path = os.path.join(IMAGE_PATH, 'icon/1.ico')
 
     def run(self) -> None:
@@ -59,4 +62,6 @@ class FourthTabThread(QThread):
             self.msg_signal.emit('信息', '程序运行结束！', self.icon_path)
         except Exception:
             self.msg_signal.emit('错误', '程序运行错误！', self.icon_path)
-            return None
+        finally:
+            self.run_btn.setEnabled(True)
+        return None

@@ -74,7 +74,7 @@ class FourthTabLayout:
             if not os.path.exists(self.path_edit.text()):
                 message_box("错误", "无效路径！", os.path.join(IMAGE_PATH, 'icon/1.ico'))
                 return None
-            self.thread = FourthTabThread(self.path_edit.text(), self.edit_info_list)
+            self.thread = FourthTabThread(self.path_edit.text(), self.edit_info_list, self.run_btn)
             self.thread.run_signal.connect(self._write_edit_msg)
             self.thread.msg_signal.connect(message_box)
             self.thread.start()

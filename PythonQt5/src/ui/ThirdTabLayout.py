@@ -80,7 +80,7 @@ class ThirdTabLayout:
                 file_type = 0
             else:
                 file_type = 1
-            self.thread = ThirdTabThread(self.path_edit.text(), self.edit_info_list, file_type)
+            self.thread = ThirdTabThread(self.path_edit.text(), self.edit_info_list, file_type, self.run_btn)
             self.thread.run_signal.connect(self._write_edit_msg)
             self.thread.msg_signal.connect(message_box)
             self.thread.start()

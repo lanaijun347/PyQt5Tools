@@ -6,6 +6,7 @@ from typing import Dict
 
 import chardet
 from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtWidgets import QPushButton
 from lxml import etree
 
 from src.basic import cmd_insert_space
@@ -16,11 +17,12 @@ class ThirdTabThread(QThread):
     run_signal = pyqtSignal(int)
     msg_signal = pyqtSignal(str, str, str)
 
-    def __init__(self, path: str, edit_msg: list, file_type: int):
+    def __init__(self, path: str, edit_msg: list, file_type: int, run_btn: QPushButton):
         super(ThirdTabThread, self).__init__()
         self.edit_msg = edit_msg
         self.path = path
         self.file_type = file_type
+        self.run_btn = run_btn
         self.out_dir = os.path.join(CURRENT_PATH, 'out')  # 文件路径输出
         self.out_file = os.path.join(self.out_dir, 'frame_id.txt')
         self.icon_path = os.path.join(IMAGE_PATH, 'icon/1.ico')
@@ -90,7 +92,10 @@ class ThirdTabThread(QThread):
             self.msg_signal.emit('信息', '程序运行结束！', self.icon_path)
         except Exception:
             self.msg_signal.emit('错误', '程序运行错误！', self.icon_path)
-            return None
+        finally:
+            self.run_btn.setEnabled(True)
+        return None
+
 
     def get_protocol_id(self, path) -> tuple:
         result = ("", "")
