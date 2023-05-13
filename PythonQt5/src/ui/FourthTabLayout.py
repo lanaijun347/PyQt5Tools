@@ -80,6 +80,5 @@ class FourthTabLayout:
             self.thread.start()
         except Exception:
             message_box("错误", "执行出错！", os.path.join(IMAGE_PATH, 'icon/1.ico'))
-            return None
-        finally:
             self.run_btn.setEnabled(True)
+

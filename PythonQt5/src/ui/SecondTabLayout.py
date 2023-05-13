@@ -227,5 +227,5 @@ class SecondTabLayout:
             self.thread.start()
         except Exception:
             self.message_box("错误", "运行出错!")
-        finally:
             self.run_btn.setEnabled(True)
+

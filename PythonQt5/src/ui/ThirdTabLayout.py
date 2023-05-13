@@ -86,9 +86,8 @@ class ThirdTabLayout:
             self.thread.start()
         except Exception:
             message_box("错误", "执行出错！", os.path.join(IMAGE_PATH, 'icon/1.ico'))
-            return None
-        finally:
             self.run_btn.setEnabled(True)
+
 
     def _select_type_layout(self):
         self.radio_layout = RadioButtonLayout('\t获取文件类型：', "标准协议类型", "VCICfg.xml")

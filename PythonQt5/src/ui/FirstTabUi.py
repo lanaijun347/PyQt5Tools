@@ -159,5 +159,4 @@ class FirstTabUi:
             self.my_thread.start()
         except Exception:
             self._end("运行出错了！")
-        finally:
             self.run_btn.setEnabled(True)
