@@ -6,7 +6,7 @@ block_cipher = None
 
 a = Analysis(
     ['main.py'],
-    pathex=['F:\\GitHubProject\\PythonProject\\PyQt5Tools\\PythonQt5', 'F:\\GitHubProject\\PythonProject\\PyQt5Tools\\PythonQt5\\chatvenv\\Lib\\site-packages'],
+    pathex=[],
     binaries=[],
     datas=[('./images/icon/1.ico', './images/icon'), ('./images/WeChatFriendQRCode.png', './images')],
     hiddenimports=[],
@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='协议命令获取工具',
+    name='诊断常用工具',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

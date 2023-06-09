@@ -135,6 +135,7 @@ class SecondTabLayout:
     def path_exists(self, path_title, path):
         if not os.path.exists(path):
             self.message_box('错误', f'{path_title}路径不存在。')
+            self.run_btn.setEnabled(True)
             return False
         return True
 
@@ -164,6 +165,7 @@ class SecondTabLayout:
                 self.message_box("警告", "源文件路径无该文件，请确认拷贝类型是否选择正确!")
             else:
                 self.message_box("警告", "源文件路径无文件夹，请确认拷贝类型是否选择正确!")
+            self.run_btn.setEnabled(True)
             result = False
         return result, cp_type, file_list
 

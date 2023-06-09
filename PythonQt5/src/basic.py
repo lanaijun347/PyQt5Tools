@@ -38,7 +38,7 @@ def get_protocol_menu_id(path) -> list:
     :return: id列表
     """
     id_list = []
-    with open(path, 'r') as f:
+    with open(path, 'r', encoding='utf-8', errors='ignore') as f:
         for line in f.readlines():
             if '\\' in line:
                 name = line.split('\\')[-2]
