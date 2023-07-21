@@ -73,7 +73,7 @@ class SecondTabThread(QThread):
                 folder_name = os.path.split(path)[-1]
                 if file.upper() == folder_name.upper():
                     copy_path = os.path.join(self.copy_path, folder_name)
-                    shutil.rmtree(path, copy_path)
+                    shutil.copytree(path, copy_path)
                     flag = True
                     break
             if not flag:
