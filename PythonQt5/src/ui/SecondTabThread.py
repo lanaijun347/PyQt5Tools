@@ -46,16 +46,20 @@ class SecondTabThread(QThread):
     def file_type_copy(self, pgb_value, count):
         file_format = ''
         file_name = ''
-        for file in self.copy_file:
+        tmp_list = list(set(self.copy_file))
+        root_list = self.from_path[0].strip().split('\\')
+        if not root_list[-1]:
+            del root_list[-1]
+        del root_list[-1]
+        for file in tmp_list:
             flag = False
-            for path in self.from_path:
-                current_file = os.path.split(path)[-1]
-                file_name, file_format = current_file.split('.')
-                if file.upper() == file_name.upper():
-                    copy_path = os.path.join(self.copy_path, current_file)
-                    shutil.copyfile(path, copy_path)
-                    flag = True
-                    break
+            file_format = self.from_path[0].split('.')[-1]
+            current_file = file + '.' + file_format
+            tmp_path = os.path.join('\\'.join(root_list), current_file)
+            if os.path.exists(tmp_path):
+                copy_path = os.path.join(self.copy_path, current_file)
+                shutil.copyfile(tmp_path, copy_path)
+                flag = True
             if not flag:
                 self.edit_msg.append(f'警告：源路径未找到名为 {file} 的文件。')
                 self.run_signal.emit(pgb_value)
@@ -67,7 +71,8 @@ class SecondTabThread(QThread):
 
     def folder_type_copy(self, pgb_value, count):
         folder_name = ''
-        for file in self.copy_file:
+        tmp_list = list(set(self.copy_file))
+        for file in tmp_list:
             flag = False
             for path in self.from_path:
                 folder_name = os.path.split(path)[-1]

@@ -28,7 +28,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='诊断常用工具',
+    name='诊断开发常用工具-202312081708',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

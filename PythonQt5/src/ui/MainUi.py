@@ -15,7 +15,7 @@ class MainUi(QWidget):
 
     def init_ui(self):
         self.desktop = QApplication.desktop()
-        self.setWindowTitle('Tools')
+        self.setWindowTitle(APP_NAME + '-' + str(VERSION))
         # 设置图标
         self.setWindowIcon(QIcon(os.path.join(IMAGE_PATH, 'icon/1.ico')))
         # 隐藏标题栏
